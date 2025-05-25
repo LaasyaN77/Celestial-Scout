@@ -2,28 +2,23 @@ function start_gui()
     screenSize = get(0, 'ScreenSize');
     fig = figure('Name', 'Celestial scout', 'NumberTitle', 'off', 'Position',[1500, 0, 1000, 800], 'Color', [0, 0, 0]);
     
-    % Set background image
+    % background image
     ax = axes('Position', [0, 0, 1, 1]);  % Full screen axes
     backgroundImage = imread('background_image.jpg');  % Path to your background image
     
-    % Resize the image to match the screen size
+    % resize the image to screen size
     resizedImage = imresize(backgroundImage, [screenSize(4), screenSize(3)]);  % Resize to screenHeight, screenWidth
-    
-    % Display the resized image
     imshow(resizedImage, 'Parent', ax);  
-    
-    % Make axes invisible
     set(ax, 'Visible', 'off');
 
-    % Add centered title text
+    % display text
     uicontrol('Style', 'text', 'String', '  Celestial Scout  ', 'Position', [220, 450, 550, 70], ...
               'FontSize', 50, 'FontWeight', 'bold','FontName', 'Brush Script MT', 'BackgroundColor', [0, 0, 0, 0.5], 'HorizontalAlignment', 'center', 'ForegroundColor', [0.8, 1, 1]);
     
-    % Add centered subtitle text beneath the title
     uicontrol('Style', 'text', 'String', 'Uncovering the celestial skies', 'Position', [310, 400, 400, 30], ...
               'FontSize', 20, 'FontAngle', 'italic', 'HorizontalAlignment', 'center', 'BackgroundColor', [0.8, 1, 1], 'ForegroundColor', 'black');
     
-    % Add a button below the subtitle, which calls another function when clicked
+    % buttons
     uicontrol('Style', 'pushbutton', 'String', 'Explore', 'Position', [450, 200, 100, 50], ...
               'FontSize', 14, 'Callback', @(src, event) inputGUI(fig), 'BackgroundColor', 'none', ...
               'ForegroundColor', [0.8, 1, 1], ... % White text
@@ -34,8 +29,7 @@ function start_gui()
               'ForegroundColor', [0.8, 1, 1], ... % Light cyan text
               'FontWeight', 'bold');
     
-    % Function to be called when the button is clicked
-
+    % group details
     function showTeamProjectDetails(~, ~) 
         fig = uifigure('Name', 'Know the Team', 'Position', [400, 100, 540, 450]);
         fig.Color = 'black'; % Set the background color to black
@@ -61,8 +55,7 @@ function start_gui()
             'FontColor', 'white', ... % Set text color to white
             'BackgroundColor', 'black'); % Match background to the window
 
-        
-        % Add a button to close the window
+        %close
         btn = uibutton(fig, ...
             'Text', 'Okay', ...
             'Position', [220, 10, 100, 40], ... % Position button at the bottom center
@@ -74,25 +67,25 @@ end
 
 function inputGUI(fig)
     close(fig);
-    % Create the main figure window, maximized
-    screenSize = get(0, 'ScreenSize'); % Get screen size
+    % main figure window, maximized
+    screenSize = get(0, 'ScreenSize'); 
     fig = uifigure('Name', 'Constellation Viewer', 'Position', [0 0 screenSize(3) screenSize(4)], 'Color', [0, 0, 0]);
-    %fig.Color = [0, 0, 0]; % Set figure background color to black
+    %fig.Color = [0, 0, 0]; % figure background color to black
 
-    % Create a grid layout for splitting the figure into two halves
+    % grid layout - two halves
     mainLayout = uigridlayout(fig, [1, 2]);
-    mainLayout.ColumnWidth = {'0.7x', '2x'}; % Allocate 1:2 space for input and output
+    mainLayout.ColumnWidth = {'0.7x', '2x'}; 
     mainLayout.BackgroundColor = [0, 0, 0];
 
-    % Left panel for user input
+    % left panel for user input
     inputPanel = uipanel(mainLayout, 'Title', 'User Input', 'FontSize', 14, 'ForegroundColor', [1, 1, 1]);
-    inputPanel.BackgroundColor = [0, 0, 0]; % Set panel background color to black
+    inputPanel.BackgroundColor = [0, 0, 0]; 
     inputLayout = uigridlayout(inputPanel, [6, 2]);
-    inputLayout.RowHeight = {30, 30, 30, 30, 30, 40, '1x'}; % Add rows and adjust proportions
+    inputLayout.RowHeight = {30, 30, 30, 30, 30, 40, '1x'}; % add rows and adjust proportions
     inputLayout.ColumnWidth = {'1x', '2x'};
     inputLayout.BackgroundColor = [0, 0, 0];
 
-    % Input fields and labels with updated colors
+    % input fields and labels 
     uilabel(inputLayout, 'Text', 'Date (yyyy-mm-dd):', 'HorizontalAlignment', 'right', 'FontSize', 13, 'FontColor', [1, 1, 1]);
     dateField = uieditfield(inputLayout, 'text', 'Value', '2024-11-29', 'BackgroundColor', [0.3, 0.3, 0.3], 'FontColor', [1, 1, 1]);
     dateField.HorizontalAlignment = 'center';
@@ -109,17 +102,16 @@ function inputGUI(fig)
     lonField = uieditfield(inputLayout, 'numeric', 'Value', -122.4194, 'BackgroundColor', [0.3, 0.3, 0.3], 'FontColor', [1, 1, 1]);
     lonField.HorizontalAlignment = 'center';
     
-    % Submit button
     submitButton = uibutton(inputLayout, 'Text', 'Submit', 'ButtonPushedFcn', @(btn, event) submitDetails(), 'FontSize', 15, 'BackgroundColor', [0.5, 0.5, 0.5], 'FontColor', [1, 1, 1]);
     submitButton.Layout.Row = 6;
     submitButton.Layout.Column = [1 2];
     
-    % Results tab group
+    % results tab group
     resultsTabGroup = uitabgroup(inputLayout);
     resultsTabGroup.Layout.Row = 7;
     resultsTabGroup.Layout.Column = [1 2];
 
-    % Tabs for results with updated colors
+    % tabs for results 
     visibleTab = uitab(resultsTabGroup, 'Title', 'Visible Constellations');
     visibleTab.BackgroundColor = [0, 0, 0];
     visibleTextArea = uitextarea(visibleTab, 'Editable', 'off', 'BackgroundColor', [0.2, 0.2, 0.2], 'FontColor', [1, 1, 1], 'FontSize', 12);
@@ -130,7 +122,7 @@ function inputGUI(fig)
     nonVisibleTextArea = uitextarea(nonVisibleTab, 'Editable', 'off', 'BackgroundColor', [0.2, 0.2, 0.2], 'FontColor', [1, 1, 1]);
     nonVisibleTextArea.Position = [10, 10, 500, 600];
 
-    % Right panel for output constellations
+    % right panel for output constellations
     outputPanel = uipanel(mainLayout, 'Title', 'Visible Constellations', 'FontSize', 14, 'ForegroundColor', [1, 1, 1]);
     outputPanel.BackgroundColor = [0, 0, 0];
     outputPanel.Layout.Column = 2;
@@ -139,14 +131,14 @@ function inputGUI(fig)
     outputLayout.BackgroundColor = [0, 0, 0];
     %outputLayout.Padding = [0 0 0 0];
 
-    % Tab group for output
+    % tab group for output
     tabGroup = uitabgroup(outputLayout);
     tab1 = uitab(tabGroup, 'Title', '');
     tab1.BackgroundColor = [0, 0, 0]; 
     axBackground = axes(tab1, 'Position', [0 0 1 1]); % Full axes for background
     imshow('constellations/plot_bg2.png', 'Parent', axBackground);
 
-    % Define the callback function for the button
+    % callback function
     function submitDetails()
         % Retrieve inputs from the fields
         dateInput = dateField.Value;
@@ -154,44 +146,43 @@ function inputGUI(fig)
         latitude = latField.Value;
         longitude = lonField.Value;
 
-        % Validate inputs
+        % validation
         if isempty(dateInput) || isempty(timeInput) || isnan(latitude) || isnan(longitude)
             uialert(fig, 'Please fill in all fields with valid values.', 'Input Error', 'BackgroundColor', [0, 0, 0], 'FontColor', [1, 1, 1]);
             return;
         end
 
-        % Clear previous results
+        % clear previous results
         visibleTextArea.Value = ''; % Clear visible results
         nonVisibleTextArea.Value = ''; % Clear non-visible results
         delete(tabGroup.Children); % Clear previous plot tabs
 
-        % Call the visibility function and display results
+        % call visibility function and display results
         visible_constellations_3D(dateInput, timeInput, latitude, longitude, tabGroup, visibleTextArea, nonVisibleTextArea);
     end
 end
 
 %function constellation_details
 
-% Visible constellations function
+% visible constellations function
 function visible_constellations_3D(dateStr, timeStr, latitude, longitude, tabGroup, visibleTextArea, nonVisibleTextArea)
     % constellations and their star coordinates
 
-    % Calculate Local Sidereal Time (LST)
+    % calculate Local Sidereal Time (LST)
     LST = calculate_LST(dateStr, timeStr, longitude);
 
-    % Initialize cell arrays for visible and non-visible constellations
     visible_constellations = {};
     non_visible_constellations = {};
 
     %constellation_details = getConstellationDetails();
     
-    % Loop through constellations
+    % loop through constellations
     for c = fieldnames(constellations)'
         constellation = c{1};
         stars = constellations.(constellation);
         visible = false;
     
-        % Initialize data for plotting
+        % data for plotting
         x = [];
         y = [];
         z = [];
@@ -204,10 +195,10 @@ function visible_constellations_3D(dateStr, timeStr, latitude, longitude, tabGro
             RA_deg = convertRAtoDegrees(star.RA);
             DEC_deg = convertDECtoDegrees(star.Dec);
     
-            % Convert RA and Dec to Altitude and Azimuth
+            % RA and Dec to Altitude and Azimuth
             [Alt, Az] = radec2altaz(RA_deg, DEC_deg, LST, latitude);
     
-            % Calculate Cartesian coordinates for 3D plotting
+            % cartesian coordinates for 3D plotting
             Alt_rad = deg2rad(Alt);
             Az_rad = deg2rad(Az);
             x = [x; cos(Alt_rad) * cos(Az_rad)];
@@ -223,17 +214,17 @@ function visible_constellations_3D(dateStr, timeStr, latitude, longitude, tabGro
             end
         end
     
-        % Append results and create a tab if visible
+        % add to results and create a tab if visible
         if visible
-            % Append visible constellation info
+            % add visible constellation info
             visible_constellations = [visible_constellations; {['Constellation: ', constellation]}];
             visible_constellations = [visible_constellations; resultLines; {''}];
     
-            % Create a new tab for the constellation
+            % new tab for the constellation
             tab = uitab(tabGroup, 'Title', constellation);
             tab.BackgroundColor = [0, 0, 0];
-            axBackground = axes(tab, 'Position', [0 0 1 1]); % Full axes for background
-            imshow('constellations/plot_bg2.png', 'Parent', axBackground); % Set your image as the background
+            axBackground = axes(tab, 'Position', [0 0 1 1]); 
+            imshow('constellations/plot_bg2.png', 'Parent', axBackground); % image as the background
             
             ax = uiaxes(tab, 'Color', [0, 0, 0], 'GridColor', [1, 1, 1], ...
                 'XColor', [1, 1, 1], 'YColor', [1, 1, 1], 'ZColor', [1, 1, 1], ...
@@ -246,7 +237,7 @@ function visible_constellations_3D(dateStr, timeStr, latitude, longitude, tabGro
                 text(ax, x(j), y(j), z(j), labels{j}, 'VerticalAlignment', 'bottom', 'HorizontalAlignment', 'right', 'Color', [1, 1, 1]);
             end
     
-            % Draw lines between stars
+            % connecting stars
             for j = 1:length(x) - 1
                 plot3(ax, [x(j), x(j+1)], [y(j), y(j+1)], [z(j), z(j+1)], 'r-', 'LineWidth', 1.5);
             end
@@ -266,12 +257,12 @@ function visible_constellations_3D(dateStr, timeStr, latitude, longitude, tabGro
             drawnow;
 
         else
-            % Append non-visible constellation info
+            % add to non-visible constellation info
             non_visible_constellations = [non_visible_constellations; {['Constellation ', constellation, ' is not visible.', newline, newline]}];
         end
     end
 
-% Combine visible and non-visible constellations for display
+% combine visible and non-visible constellations
     visibleTextArea.Value = visible_constellations;
     nonVisibleTextArea.Value = non_visible_constellations;
 end
@@ -280,29 +271,29 @@ function showDetailsMessage(constellation)
     % Fetch constellation details
     constellation_details = getConstellationDetails();
     
-    % Check if the details for the selected constellation exist
+    % check if the details for the selected constellation exist
     if isfield(constellation_details, constellation)
         % Access the description and image path for the selected constellation
         details = constellation_details.(constellation);  % This dynamically accesses the constellation's details
         description = details.description;
         image_path = details.image;
         
-        % Create a custom message box (UI Figure)
+        % custom message box (UI Figure)
         messageBox = uifigure('Name', ['Details of ', constellation], 'Position', [100, 100, 600, 400], 'Color', [0,0,0]);
 
         grid = uigridlayout(messageBox, [1, 2]);
         grid.BackgroundColor = [0, 0, 0];
         grid.ColumnWidth = {'1x', '1x'};  % Equal width for both panels
 
-        % Right panel for the image
+        % right panel for the image
         leftPanel = uipanel(grid, 'Title', [constellation,' Image'], 'ForegroundColor', [1, 1, 1]);
         leftPanel.BackgroundColor = [0, 0, 0];
         leftPanel.Layout.Column = 1;  % Assign to the second column
 
-        % Create axes to display the image inside the left panel
+        % axes to display the image inside the left panel
         ax = axes(leftPanel, 'Position', [0.001, 0.008, 1.0, 1.0]);  % Adjust as needed
         
-        % Display the image in the axes
+        % display image in the axes
         img = imread(image_path);  % Read the image
         imshow(img, 'Parent', ax);  % Show the image in the axes
 
@@ -312,28 +303,28 @@ function showDetailsMessage(constellation)
         rightPanel.BackgroundColor = [0, 0, 0];
         rightPanel.Layout.Column = 2;  % Assign to the first column
 
-        % Create a label to display the description text inside the left panel
+        % label to display the description text inside the left panel
         descriptionLabel = uilabel(rightPanel, 'Text', description, 'Position', [5, 5, 250, 350], ...
                                    'FontSize', 12, 'FontColor', [1, 1, 1], 'HorizontalAlignment', 'left', 'WordWrap', 'on');
         
     else
-        % If no details are available for the constellation, show a message
+        % exception
         disp(['No details available for ', constellation]);
     end
 end
 
 
-% Convert RA from [hours, minutes, seconds] to degrees
+% RA (hr, min, sec) to degrees
 function RA_deg = convertRAtoDegrees(RA)
     RA_deg = RA(1) * 15 + RA(2) * 15 / 60 + RA(3) * 15 / 3600;
 end
 
-% Convert DEC from [degrees, minutes, seconds] to degrees
+% DEC (degrees, min, sec) to degrees
 function DEC_deg = convertDECtoDegrees(DEC)
     DEC_deg = DEC(1) + DEC(2) / 60 + DEC(3) / 3600;
 end
 
-% Calculate Local Sidereal Time (LST)
+% Local Sidereal Time (LST) function
 function LST = calculate_LST(dateStr, timeStr, longitude)
     JD = datetime_to_julian(dateStr, timeStr);
     T = (JD - 2451545.0) / 36525.0;
@@ -341,30 +332,30 @@ function LST = calculate_LST(dateStr, timeStr, longitude)
     LST = mod(GST + longitude, 360.0);
 end
 
-% Convert date and time to Julian Date
+% date and time to Julian Date function
 function JD = datetime_to_julian(dateStr, timeStr)
     dt = datetime([dateStr, ' ', timeStr], 'InputFormat', 'yyyy-MM-dd HH:mm:ss');
     JD = juliandate(dt);
 end
 
-% Convert RA and Dec to Alt-Az (elevation and azimuth)
+% RA and Dec to Alt-Az function
 function [Alt, Az] = radec2altaz(RA_deg, DEC_deg, LST, latitude)
-    % Convert LST and RA to radians
+    % LST and RA to radians
     LST_rad = deg2rad(LST);
     RA_rad = deg2rad(RA_deg);
     latitude_rad = deg2rad(latitude);
 
-    % Calculate Hour Angle (HA)
+    % Hour Angle
     HA = LST_rad - RA_rad;
 
-    % Calculate Altitude and Azimuth
+    % Altitude and Azimuth
     sin_alt = sin(latitude_rad) * sin(deg2rad(DEC_deg)) + cos(latitude_rad) * cos(deg2rad(DEC_deg)) * cos(HA);
     Alt = rad2deg(asin(sin_alt));
 
     cos_az = (sin(deg2rad(DEC_deg)) - sin(deg2rad(Alt)) * sin(latitude_rad)) / (cos(deg2rad(Alt)) * cos(latitude_rad));
     Az = rad2deg(acos(cos_az));
 
-    % Adjust Azimuth
+    % adjust Azimuth
     if sin(deg2rad(HA)) > 0
         Az = 360 - Az;
     end
